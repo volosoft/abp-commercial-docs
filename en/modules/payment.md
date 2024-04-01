@@ -77,7 +77,7 @@ This page is used to send Name, Surname and Email Address of user to PayU.
 
 #### Installation
 
-In order to configure the application to use the `PaymentModule`, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to root module. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration.
+In order to configure the application to use the `PaymentModule`, you first need to import `PaymentAdminConfigModule` from `@volo/abp.ng.payment/admin/config` to the root module. `PaymentAdminConfigModule` has a static `forRoot` method which you should call for a proper configuration:
 
 ```js
 // app.module.ts
@@ -94,7 +94,7 @@ import { PaymentAdminConfigModule } from '@volo/abp.ng.payment/admin/config';
 export class AppModule {}
 ```
 
-The `PaymentModule` should be imported and lazy-loaded in your routing module. It has a static `forLazy` method for configuration. It is available for import from `@volo/abp.ng.payment`.
+The `PaymentAdminModule` should be imported and lazy-loaded in your routing module as below:
 
 ```js
 // app-routing.module.ts
