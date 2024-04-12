@@ -31,6 +31,16 @@ You can view and manage user sessions in the `Users` page of the Identity module
 
 Once you revoke a session, the user will be logged out.
 
+## IdentitySessionCleanupBackgroundWorker
+
+The `IdentitySessionCleanupBackgroundWorker` is a background worker that will remove the sessions that have not been active in the past.
+
+###  IdentitySessionCleanupOptions
+
+* `IsCleanupEnabled`: Default value is `true`. 
+* `CleanupPeriod`: Default value is 1 hour.
+* `InactiveTimeSpan`: Default value is `30` days.
+
 ## How it works
 
 This feature is dependent on the [Dynamic Claims](https://docs.abp.io/en/abp/latest/Dynamic-Claims) feature of the ABP framework.
