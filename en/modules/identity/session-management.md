@@ -1,6 +1,6 @@
 # Session Management
 
-Session Management feature allows you to prevent concurrent login and manage user sessions.
+The Session Management feature allows you to prevent concurrent login and manage user sessions.
 
 ## Prevent concurrent login
 
@@ -13,7 +13,7 @@ There is a setting in the identity section to prevent concurrent login. It has t
 2. `LogoutFromSameTypeDevices`
 
     Only one session of the same type can exist. 
-    `Same type` means we can restrict single login with browser, but we may still can login with a mobile application without affecting the browser session. So, for each device type, we may allow a single login.
+    `Same type` means we can restrict single login with a browser, but we may still can login with a mobile application without affecting the browser session. So, for each device type, we may allow a single login.
 
 3. `LogoutFromAllDevices`
 
@@ -23,7 +23,7 @@ There is a setting in the identity section to prevent concurrent login. It has t
 
 ## Manage user sessions
 
-You can view and manage user sessions in the `Users` page of the Identity module.
+You can view and manage user sessions on the `Users` page of the Identity module.
 
 ![user-sessions](../../images/user-sessions.png)
 ![sessions-modal.png](../../images/sessions-modal.png)
@@ -43,11 +43,11 @@ The `IdentitySessionCleanupBackgroundWorker` is a background worker that will re
 
 ## How it works
 
-This feature is dependent on the [Dynamic Claims](https://docs.abp.io/en/abp/latest/Dynamic-Claims) feature of the ABP framework.
+This feature depends on the [Dynamic Claims](https://docs.abp.io/en/abp/latest/Dynamic-Claims) feature of the ABP framework. Here is how it works:
 
 * The `IdentitySessionClaimsPrincipalContributor` will generate a random GUID as a `sessionid` to add the `ClaimsPrincipal`, This usually happens when logging in to get the user's claims.
-* The `OnSignedIn` event of `Identity` and `ProcessSignIn` event of `OpenIddict` will get this `sessionid` and store it in the database(`IdentitySession` table)
-* The `Dynamic Claims` system's `IdentitySessionDynamicClaimsPrincipalContributor` will ensure the `sessionid` exists or sign out.
+* The `OnSignedIn` event of `Identity` and `ProcessSignIn` event of `OpenIddict` will get this `sessionid` and store it in the database (`IdentitySession` table).
+* The `Dynamic Claims` system's `IdentitySessionDynamicClaimsPrincipalContributor` will ensure the `sessionid` exists or signs out.
 * The `IdentitySessionChecker` will check the `sessionid` that exists and update the `LastAccessed` and `IpAddress`  to the cache.
 * The `IdentitySessionManager` is used to get one or a list of sessions and update the` LastAccessed` and `IpAddress` from the cache to the database.
 * The module will remove the session when logging out.
