@@ -331,6 +331,10 @@
             {
               "text": "Linked Accounts",
               "path": "modules/account/linkedaccounts.md"
+            },
+            {
+              "text": "Session Management",
+              "path": "modules/account/session-management.md"
             }
           ]
         },
@@ -381,6 +385,10 @@
             {
               "text": "Two Factor Authentication",
               "path": "modules/identity/two-factor-authentication.md"
+            },
+            {
+              "text": "Session Management",
+              "path": "modules/identity/session-management.md"
             }
           ]
         },
