@@ -4,7 +4,7 @@ The ABP Commercial MVC `v8.1.0` application template has been tested against sec
 
 Many of these alerts are **false-positive**, meaning the vulnerability scanner detected these issues, but they are not exploitable. It's clearly explained for each false-positive alert why this alert is a false-positive. 
 
-In the next sections, you will find the affected URLs, alert descriptions, false-positive explanations, and fixes for the issues. Some positive alerts are already fixed or needed additional actions that can be taken by you. The issue links for the fixes are mentioned in each positive alert.
+In the next sections, you will find the affected URLs, attack parameters (request-body), alert descriptions, false-positive explanations, and fixes for the issues. Some positive alerts are already fixed or needed additional actions that can be taken by you. The issue links for the fixes are mentioned in each positive alert.
 
 ## Alerts
 
@@ -16,10 +16,9 @@ There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and in
 
 ### Path Traversal [Risk: High] - False Positive
 
-- *[GET] - https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=audit-logs&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=true&sorting=executionTime+desc&skipCount=0&maxResultCount=10*
-- *[POST] - https://localhost:44349/Account/Login*
-- *[POST] - https://localhost:44349/Identity/SecurityLogs*
-- *[POST] - https://localhost:44349/LanguageManagement/Texts*
+- *[GET] - https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=audit-logs&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=true&sorting=executionTime+desc&skipCount=0&maxResultCount=10* (attack: **httpMethod=audit-logs**)
+- *[POST] - https://localhost:44349/Account/Login* (attack: **\Login**)
+- *[POST] - https://localhost:44349/Identity/SecurityLogs* (attack: **\SecurityLogs**)
 
 **Description**:
 
@@ -31,10 +30,10 @@ This is a **false-positive** alert since ABP Framework does all related checks f
 
 ### SQL Injection [Risk: High] - False Positive
 
-* *[POST] — https://localhost:44349/Account/Login*
-* *[POST] — https://localhost:44349/AuditLogs*
-* *[POST] — https://localhost:44349/Identity/SecurityLogs*
-* *[POST] — https://localhost:44349/LanguageManagement/Texts*
+* *[POST] — https://localhost:44349/Account/Login* (attack: **1q2w3E* AND 1=1 --**)
+* *[POST] — https://localhost:44349/AuditLogs* (attack: **GET' AND '1'='1' --**)
+* *[POST] — https://localhost:44349/Identity/SecurityLogs* (attack: **admin' AND '1'='1**)
+* *[POST] — https://localhost:44349/LanguageManagement/Texts* (attack: **true" AND "1"="1" --**)
 * *[POST] — https://localhost:44349/Account/Manage?CurrentPassword=ZAP%27+AND+%271%27%3D%271%27+--+&NewPassword=ZAP&NewPasswordConfirm=ZAP*
 
 **Description**:
@@ -47,7 +46,7 @@ ABP uses Entity Framework Core and LINQ. It's safe against SQL Injection because
 
 ### SQL Injection - Authentication Bypass [Risk: High] - False Positive
 
-- *[POST] - https://localhost:44349/Account/Login?returnUrl=%2FAccount%2FManage*
+- *[POST] - https://localhost:44349/Account/Login?returnUrl=%2FAccount%2FManage* (attacks: **1q2w3E* AND 1=1 --** and **admin OR 1=1**)
 
 **Description**:
 
