@@ -95,7 +95,7 @@ There are only two URLs that are reported as exposing error messages. This is a 
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/AuthorityDelegationModal*
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/DelegateNewUserModal*
 - *[GET] — https://localhost:44349/Account/ForgotPassword _(other several account URLS)_* 
-- *[GET] - https://localhost:44349/Account/Manage _(other several account URLS)_*
+- *[GET] — https://localhost:44349/Account/Manage _(other several account URLS)_*
 
 **Description:** 
 
@@ -105,7 +105,7 @@ Content Security Policy (CSP) is an added layer of security that helps to detect
 
 Ensure that your web server, application server, load balancer, etc. are configured to set the `Content-Security-Policy` header, to achieve optimal browser support: "Content-Security-Policy" for Chrome 25+, Firefox 23+, and Safari 7+, "X-Content-Security-Policy" for Firefox 4.0+ and Internet Explorer 10+, and "X-WebKit-CSP" for Chrome 14+ and Safari 6+.
 
-This vulnerability has fixed in ABP v7.0. You can check the related issue from https://github.com/abpframework/abp/issues/14173. You can configure the `AbpSecurityHeadersOptions` and set the `UseContentSecurityPolicyHeader` property as *true* to add the `Content-Security-Policy` header into your application:
+This vulnerability has fixed in ABP v7.0. You can check the related issue from [https://github.com/abpframework/abp/issues/14173](https://github.com/abpframework/abp/issues/14173). You can configure the `AbpSecurityHeadersOptions` and set the `UseContentSecurityPolicyHeader` property as *true* to add the `Content-Security-Policy` header into your application:
 
 ```csharp
 Configure<AbpSecurityHeadersOptions>(options => 
@@ -118,10 +118,10 @@ Configure<AbpSecurityHeadersOptions>(options =>
 
 ### Format String Error [Risk: Medium] - False Positive
 
-- *[GET] - https://localhost:44349/api/language-management/language-texts?filter=&resourceName=&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&targetCultureName=cs&getOnlyEmptyValues=false&sorting=name+asc&skipCount=0&maxResultCount=10*
-- *[GET] - https://localhost:44349/LanguageManagement/Texts/Edit?name=%27%7B0%7D%27+and+%27%7B1%7D%27+do+not+match.&targetCultureName=cs&resourceName=AbpValidation&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
-- *[GET] - https://localhost:44349/Abp/Languages/Switch?culture=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&returnUrl=%2F&uiCulture=ar*
-- *[GET] - https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
+- *[GET] — https://localhost:44349/api/language-management/language-texts?filter=&resourceName=&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&targetCultureName=cs&getOnlyEmptyValues=false&sorting=name+asc&skipCount=0&maxResultCount=10*
+- *[GET] — https://localhost:44349/LanguageManagement/Texts/Edit?name=%27%7B0%7D%27+and+%27%7B1%7D%27+do+not+match.&targetCultureName=cs&resourceName=AbpValidation&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
+- *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&returnUrl=%2F&uiCulture=ar*
+- *[GET] — https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
 - *[POST] — https://localhost:44349/Account/Login (same URL with different parameters)*
 - *[POST] — https://localhost:44349/AuditLogs*
 
@@ -214,10 +214,10 @@ X-Correlation-Id: 2c103514abd44a17b1ec792b6a5c1dc3
 
 ### XSLT Injection [Risk: Medium] - False Positive
 
-- *[GET] - https://localhost:44349/Abp/Languages/Switch?culture=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&returnUrl=%2F&uiCulture=ar*
-- *[POST] - https://localhost:44349/Account/Manage _(other several account URLS)_*
-- *[POST] - https://localhost:44349/AuditLogs*
-  
+- *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&returnUrl=%2F&uiCulture=ar*
+- *[POST] — https://localhost:44349/Account/Manage _(other several account URLS)_*
+- *[POST] — https://localhost:44349/AuditLogs*
+
 **Description**: 
 
 Injection using XSL transformations may be possible and may allow an attacker to read system information, read and write files, or execute arbitrary code.
@@ -255,7 +255,7 @@ The following alert is related to the next alert. Therefore, to understand this 
 ### Cookie Without Secure Flag [Risk: Low] — Positive (No need for a fix)
 
 * *[GET] — https://localhost:44349 (and there are several URLs)*
-* *[GET] - https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%*
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%*
 
 **Description:** A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections. The following cookies don't have an `httponly` flag.
 
@@ -337,14 +337,14 @@ The response of the endpoints above return localization texts which are not real
 
 ### Strict-Transport-Security Header Not Set [Risk: Low] - False Positive
 
-- *[DELETE] - https://localhost:44349/api/feature-management/features?providerName=E&providerKey=49dfb08f-f5ed-0b61-8d37-3a0fc6b61679*
-- *[DELETE] - https://localhost:44349/api/identity/claim-types/4c580525-c08f-9280-f729-3a0fc6b9c3fa*
-- *[DELETE] - https://localhost:44349/api/language-management/languages/6b311a44-65bd-14ea-1a21-3a0e778b41d5*
-- *[DELETE] - https://localhost:44349/api/saas/tenants/c77b1554-5837-3303-9983-3a0e77824bb3*
-- *[DELETE] - https://localhost:44349/api/openiddict/scopes?id=af5a66e2-7cbb-cf69-7301-3a0fc6bb0ebf*
-- *[GET] - https://localhost:44349/*
-- *[GET] - https://localhost:44349/Abp/ApplicationConfigurationScript*
-- *[GET] - https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=zh-Hant*
+- *[DELETE] — https://localhost:44349/api/feature-management/features?providerName=E&providerKey=49dfb08f-f5ed-0b61-8d37-3a0fc6b61679*
+- *[DELETE] — https://localhost:44349/api/identity/claim-types/4c580525-c08f-9280-f729-3a0fc6b9c3fa*
+- *[DELETE] — https://localhost:44349/api/language-management/languages/6b311a44-65bd-14ea-1a21-3a0e778b41d5*
+- *[DELETE] — https://localhost:44349/api/saas/tenants/c77b1554-5837-3303-9983-3a0e77824bb3*
+- *[DELETE] — https://localhost:44349/api/openiddict/scopes?id=af5a66e2-7cbb-cf69-7301-3a0fc6bb0ebf*
+- *[GET] — https://localhost:44349/*
+- *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript*
+- *[GET] — https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=zh-Hant*
 - other URLS...
 
 **Description**: 
@@ -363,7 +363,7 @@ This vulnerability was reported as a positive alert because the application ran 
 
 ### Timestamp Disclosure - Unix [Risk: Low] - False Positive
 
-- *[GET] - https://localhost:44349/libs/zxcvbn/zxcvbn.js?=*
+- *[GET] — https://localhost:44349/libs/zxcvbn/zxcvbn.js?=*
 
 **Description**: 
 
@@ -376,3 +376,96 @@ Manually confirm that the timestamp data is not sensitive, and that the data can
 **Explanation**: 
 
 This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most password strength estimator and it's being used widely and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
+
+---
+
+## Other Alerts
+
+The following alerts are reported by the community or our customers.
+
+### Disclosed Microsoft Client Secret [Risk: Medium] - Positive (No need for a fix)
+
+* *[GET] — https://localhost:44349/setting-management*
+
+**Description**: 
+
+Secrets shall never be exposed to unauthorized parties. This exposure can result from improper storage, insecure transmission, or inadequate access controls. In this specific case the owner of the user account is authorized to read and modify the secret. In case of administrative accounts, it could lead to further damages, by performing lateral movements, by using the credentials to access other services.
+
+**Explanation**: 
+
+The endpoint `/setting-management/` requires permission to be visited and can only be accessed via authorized users. It is the setting page to configure the application settings including 
+
+
+
+### Incorrect Session Handling – Insufficient Session Termination [Risk: Low]  - Positive 
+
+* *[GET] — https://localhost:44349/Account/Logout*
+
+**Description**: 
+
+Application logout functionality does not terminate the user's session. This increases the risk of unauthorized application access via successful session hijacking attacks, users leaving their computers unattended, and/or a local attacker utilizing the browser history. On logout, user sessions should be invalidated and all relevant session identifiers, authentication tokens and application state information deleted or overwritten both on server and on client side.
+
+**Explanation**: 
+
+You can track the status of this case at https://github.com/abpframework/abp/issues/19576
+
+
+
+### Information Disclosure via Configuration Scripts [Risk: Low] - Positive (No need for a fix)
+
+- *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript* or *https://localhost:44349/api/abp/application-configuration*
+- *[GET] — https://localhost:44349/Abp/ServiceProxyScript*
+
+**Description**: 
+
+When users authenticate to the application, their browsers issue requests to 2 endpoints that host configuration scripts for the application framework. The first contains information about the passwords that are accepted by the application. This information can be used by the attackers to narrow down their dictionaries and only focus on the possible passwords for their
+attacks. The second, on the other hand, discloses some endpoints that are unavailable to the users with low privileges.
+
+**Explanation**: 
+
+* **Application Configuration Script** 
+
+  These 2 endpoints are used by ABP application templates. The first one `/Abp/ApplicationConfigurationScript` provides configuration and user based definitions with JSON format. This data is important for SPA based applications to get the current language, localization texts, policies, settings, user info, current tenant or time zone information. This is not a data leak. User specific data can only be accessed after user logon. Other data are application-wide used not dangerous for unauthenticated users. For more information about Application Configuration, check out [docs.abp.io/en/abp/latest/API/Application-Configuration](https://docs.abp.io/en/abp/latest/API/Application-Configuration)
+
+* **Service Proxy Script**
+
+  This endpoint provides auto-generated JavaScript AJAX call methods for the backend operations. This may disclosure information about the host API methods. On the other hand, it makes easy to consume the HTTP APIs from JavaScript side. ABP Application Services are automatically converted to JavaScript proxies. But it does not mean that these JavaScript methods can be executed anonymously. The attacker still needs to log in to perform operations. For more information about Service Proxy Script, check out [docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies). If you want to disable this functionality, check out [github.com/abpframework/abp/issues/12297](https://github.com/abpframework/abp/issues/12297)
+
+### User E-mail Address Enumeration [Risk: Low] - Positive
+
+* *[GET] — https://localhost:44349/Account/ForgotPassword*
+
+**Description**: 
+
+It is possible to collect valid email addresses by interacting with the "Forgot Password" function of the
+application. This vulnerability is useful to increase the efficiency of brute force attacks. 
+
+**Explanation**: 
+
+If the email is known, it is easier to find the corresponding password. With the "Forgot Password" function, the attacker can enumerate valid email addresses as the function returns `Cannot find the given email` error, when there is no user registered with the provided e-mail address.  The following issue has been opened for this vulnerability, you can follow it at [github.com/abpframework/abp/issues/19588](https://github.com/abpframework/abp/issues/19588).
+
+### Software Version Disclosure [Risk: Low] - Positive (No need for a fix)
+
+* *[GET] — https://localhost:44349/*
+
+**Description**: 
+
+The assessed web server discloses its version number within the HTTP response headers. This information facilitates attackers in planning future attacks and can be used in the automation of the attack process. It is unnecessary to share this information with the clients of the web application. The vulnerability can be verified by issuing HTTP requests and inspecting HTTP response headers. HTTP header "Server" contains the version information.
+The following header was received in server responses: `Server: Microsoft-IIS/10.0` or `Server: Microsoft-HTTPAPI/2.0`. 
+
+**Explanation**: 
+
+This is not directly related to ABP Framework. It's a header added by the IIS server. So you can disable this header with the `web.config` file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <security>
+            <requestFiltering removeServerHeader="true" />
+        </security>
+    </system.webServer>
+</configuration>
+```
+
+The following issue has been opened for this vulnerability, you can follow it at [github.com/abpframework/abp/issues/19589]( https://github.com/abpframework/abp/issues/19589).
