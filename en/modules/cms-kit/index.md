@@ -23,6 +23,7 @@ And the following features are provided by the CMS Kit pro version:
 * [**URL forwarding**](url-forwarding.md) system to create URLs that redirect to other pages or external websites.
 * [**Poll**](poll.md) system to create quick polls for users
 * [**Page Feedback**](page-feedback.md) system to allow users to send feedback about pages.
+* [**Faq**](faq.md) system to create dynamic faq
 
 Click on a feature to understand and learn how to use it. See [the module description page](https://commercial.abp.io/modules/Volo.CmsKit.Pro) for an overview of the module features.
 
