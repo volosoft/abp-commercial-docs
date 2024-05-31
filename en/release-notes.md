@@ -4,11 +4,20 @@ This document contains **brief release notes** for each release. Release notes o
 
 > Release notes in this document don't cover the features made in the open-source ABP Framework. For the ABP Framework features, check the blog post for the related version.
 
-## 8.1 (2024-02-14)
+## 8.2 (2024-05-25)
 
-> This version is currently in preview. The final release date is planned for June, 2024.
+> This version is currently in preview. The final release date is planned for July, 2024.
 
-See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-release-candidate)** for the v8.1 release.
+See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-2-release-candidate)** for the v8.2 release.
+
+* Session Management
+* Suite: File/Image Property
+* Suite: DateOnly & TimeOnly Types
+* Periodic Log Deletion for Audit Logs
+
+## 8.1 (2024-04-04)
+
+See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-1-stable-release)** for the v8.1 release.
 
 * Suite: Bulk Delete
 * Suite: Filterable Properties
