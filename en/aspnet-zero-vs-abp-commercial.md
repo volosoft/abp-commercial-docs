@@ -160,7 +160,7 @@
             </tr>
             <tr>
                 <td>User Delegation</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -233,7 +233,7 @@
             </tr>
             <tr>
                 <td>Tenant subscription, payment &amp; billing system</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -318,7 +318,7 @@
             </tr>
             <tr>
                 <td>Session timeout & User lock Screen</td>
-                <td><i class="fa fa-minus text-secondary"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-check text-success"></i></td>
             </tr>
             <tr>
@@ -336,6 +336,11 @@
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
+            <tr>
+                <td>GDPR (downloading personal data & deleting accounts)</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>                
             <tr>
                 <td>UI Theme</td>
                 <td><a href="http://x.leptontheme.com/" target="_blank">Lepton-X</a>, <a href="http://leptontheme.com/" target="_blank">Lepton</a></td>
@@ -362,6 +367,11 @@
                 <td><i class="fa fa-check text-success"></i></td>
                 <td><i class="fa fa-minus text-secondary"></i></td>
             </tr>
+            <tr>
+                <td>.NET MAUI</td>
+                <td><i class="fa fa-check text-success"></i></td>
+                <td><i class="fa fa-check text-success"></i></td>
+            </tr>                
             <tr>
                 <td colspan="3"><strong>Rapid Application Development</strong></td>
             </tr>
