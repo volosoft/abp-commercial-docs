@@ -302,8 +302,6 @@ Manually confirm that the timestamp data is not sensitive, and that the data can
 
 This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most used password strength estimator and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
 
----
-
 ### X-Content-Type-Options Header Missing [Risk: Low] - Positive (Fixed)
 
 - *[GET] — https://localhost:44349/client-proxies/account-proxy.js?_v=638550091940000000 (and other client-proxies related URLs)*
