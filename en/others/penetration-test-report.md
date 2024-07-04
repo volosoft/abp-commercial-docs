@@ -1,6 +1,6 @@
 # ABP Commercial Penetration Test Report
 
-The ABP Commercial MVC `v8.1.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
+The ABP Commercial MVC `v8.2.0` application template has been tested against security vulnerabilities by the [OWASP ZAP v2.14.0](https://www.zaproxy.org/) tool. The demo web application was started on the `https://localhost:44349` address. The below alerts have been reported by the pentest tool. These alerts are sorted by the risk level as high, medium, and low. The informational alerts are not mentioned in this document. 
 
 Many of these alerts are **false-positive**, meaning the vulnerability scanner detected these issues, but they are not exploitable. It's clearly explained for each false-positive alert why this alert is a false-positive. 
 
@@ -10,7 +10,7 @@ In the next sections, you will find the affected URLs, attack parameters (reques
 
 There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and informational _(blue flag)_ alerts. 
 
-![penetration-test-8.1.0](../images/pen-test-alert-list-8.1.png)
+![penetration-test-8.2.0](../images/pen-test-alert-list-8.2.png)
 
 > The informational alerts are not mentioned in this document. These alerts are not raising any risks on your application and they are optional.
 
@@ -18,6 +18,7 @@ There are high _(red flag)_, medium _(orange flag)_, low _(yellow flag)_, and in
 
 - *[GET] - https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=audit-logs&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=true&sorting=executionTime+desc&skipCount=0&maxResultCount=10* (attack: **httpMethod=audit-logs**)
 - *[POST] - https://localhost:44349/Account/Login* (attack: **\Login**)
+- *[POST] - https://localhost:44349/Account/SecurityLogs* (attack: **\SecurityLogs**)
 - *[POST] - https://localhost:44349/Identity/SecurityLogs* (attack: **\SecurityLogs**)
 
 **Description**:
@@ -33,6 +34,10 @@ This is a **false-positive** alert since ABP Framework does all related checks f
 * *[POST] — https://localhost:44349/Account/Login* (attack: **1q2w3E* AND 1=1 --**)
 * *[POST] — https://localhost:44349/AuditLogs* (attack: **GET' AND '1'='1' --**)
 * *[POST] — https://localhost:44349/Identity/SecurityLogs* (attack: **admin' AND '1'='1**)
+* *[POST] — https://localhost:44349/api/account/verify-authenticator-code* (attack: **AND '1'='1**)
+* *[POST] — https://localhost:44349/Identity/ClaimTypes/CreateModal* (attack: **aaaa AND '1'='1**)
+* *[POST] — https://localhost:44349/Identity/OrganizationUnits/\** (attack: **6f4cd0ab-f4eb-7ce0-8b26-3a138af1840d" AND '1'='1**) (also, several other URLs...)
+* *[POST] — https://localhost:44349/Identity/ClaimTypes/EditModal* (attack: **aaaa AND '1'='1**)
 * *[POST] — https://localhost:44349/LanguageManagement/Texts* (attack: **true" AND "1"="1" --**)
 * *[POST] — https://localhost:44349/Account/Manage?CurrentPassword=ZAP%27+AND+%271%27%3D%271%27+--+&NewPassword=ZAP&NewPasswordConfirm=ZAP*
 
@@ -42,27 +47,14 @@ SQL injection may be possible. SQL injection is a web security vulnerability tha
 
 **Explanation**:
 
-ABP uses Entity Framework Core and LINQ. It's safe against SQL Injection because it passes all data to the database via SQL parameters. LINQ queries are not composed by using string manipulation or concatenation, that's why they are not susceptible to traditional SQL injection attacks. Therefore, this is a **false-positive** alert.
-
-### SQL Injection - Authentication Bypass [Risk: High] - False Positive
-
-- *[POST] - https://localhost:44349/Account/Login?returnUrl=%2FAccount%2FManage* (attacks: **1q2w3E* AND 1=1 --** and **admin OR 1=1**)
-
-**Description**:
-
-SQL injection may be possible on a login page, potentially allowing the application's 
-authentication mechanism to be bypassed.
-
-**Solution**:
-
-This alert indicates that we must not trust client side input (even if there is client side validation in place) and check all data on the server side. ABP Framework already does that and makes server-side validations while authenticating a user. Therefore this is a **false-positive** alert.
+ABP uses Entity Framework Core and LINQ. **It's safe against SQL Injection because it passes all data to the database via SQL parameters.** LINQ queries are not composed by using string manipulation or concatenation, that's why they are not susceptible to traditional SQL injection attacks. Therefore, this is a **false-positive** alert.
 
 ### Absence of Anti-CSRF Tokens [Risk: Medium] — False Positive
 
 * *[GET] - https://localhost:44349/Account/LinkUsers/LinkUsersModal?returnUrl=/SettingManagement*
 * *[GET] — https://localhost:44349/Account/Manage* (same URL with different query parameters)
 * *[GET] - https://localhost:44349/HostDashboard*
-* *[GET] - https://localhost:44349/SettingManagement?handler=RenderView&id=Volo.Abp.Account*
+* *[GET] - https://localhost:44349/SettingManagement?handler=RenderView&id=Volo.Abp.Account* (other several URLs)
 
 **Description**: 
 
@@ -77,7 +69,6 @@ This is a **false-positive** alert because ABP provides the Anti-CSRF token via 
 
 ### Application Error Disclosure [Risk: Medium] - False Positive
 
-- *[GET] — https://localhost:44349/api/audit-logging/audit-logs?startTime=&endTime=&url=&userName=&applicationName=&clientIpAddress=&correlationId=&httpMethod=GET&httpStatusCode=&maxExecutionDuration=&minExecutionDuration=&hasException=&sorting=executionTime%20desc&skipCount=0&maxResultCount=10*
 - *[GET] — https://localhost:44349/AuditLogs*
 
 **Description**: 
@@ -86,16 +77,20 @@ This page contains an error/warning message that may disclose sensitive informat
 
 **Explanation**:
 
-There are only two URLs that are reported as exposing error messages. This is a **false-positive** alert. The Audit Logging Module, shows request & response details and exception information, these are not sensitive information and only can be seen by the users whose related permissions are granted.
+There are only one URL that is reported as exposing error messages. This is a **false-positive** alert. The [Audit Logging Module](../modules/audit-logging.md), shows request & response details and exception information, these are not sensitive information and only can be seen by the users whose related permissions are granted.
 
 ### Content Security Policy (CSP) Header Not Set [Risk: Medium] — Positive (Fixed)
 
 - *[GET] — https://localhost:44349*
+- *[GET] — https://localhost:44349/AbpPermissionManagement/PermissionManagementModal?providerName=R&providerKey=role&providerKeyDisplayName=role*
 - *[GET] — https://localhost:44349/Abp/MultiTenancy/TenantSwitchModal*
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/AuthorityDelegationModal*
 - *[GET] — https://localhost:44349/Account/AuthorityDelegation/DelegateNewUserModal*
 - *[GET] — https://localhost:44349/Account/ForgotPassword _(other several account URLS)_* 
+- *[GET] — https://localhost:44349/Account/Login _(other several account URLS)_*
+- *[GET] — https://localhost:44349/Account/Register _(other several account URLS)_*
 - *[GET] — https://localhost:44349/Account/Manage _(other several account URLS)_*
+- *[GET] — https://localhost:44349/Account/Sessions _(other several account URLS)_*
 
 **Description:** 
 
@@ -118,12 +113,8 @@ Configure<AbpSecurityHeadersOptions>(options =>
 
 ### Format String Error [Risk: Medium] - False Positive
 
-- *[GET] — https://localhost:44349/api/language-management/language-texts?filter=&resourceName=&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&targetCultureName=cs&getOnlyEmptyValues=false&sorting=name+asc&skipCount=0&maxResultCount=10*
-- *[GET] — https://localhost:44349/LanguageManagement/Texts/Edit?name=%27%7B0%7D%27+and+%27%7B1%7D%27+do+not+match.&targetCultureName=cs&resourceName=AbpValidation&baseCultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
 - *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A&returnUrl=%2F&uiCulture=ar*
 - *[GET] — https://localhost:44349/Abp/ApplicationLocalizationScript?cultureName=ZAP%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%25n%25s%0A*
-- *[POST] — https://localhost:44349/Account/Login (same URL with different parameters)*
-- *[POST] — https://localhost:44349/AuditLogs*
 
 **Description:**
 
@@ -135,87 +126,20 @@ Rewrite the background program using proper deletion of bad character strings. T
 
 **Explanation:**
 
-The first four affected URLS are **false-positive** alerts since it's already fixed and there is not any bad character string in the responses of these endpoints anymore. (It displays an error message such as: *"The selected culture is not valid! Make sure you enter a valid culture name."*).
+The first affected URL is a **false-positive** alert since it's already fixed and there is not any bad character string in the responses of these endpoints anymore. (It displays an error message such as: *"The selected culture is not valid! Make sure you enter a valid culture name."*).
 
-The last URL is also a **false-positive** alert because there is no bad character string in the response. For example, you can see the response as the following and as seen there are no invalid chars in the response:
+The second URL is also a **false-positive** alert because there is no bad character string in the response. 
 
-```
-Volo.Abp.Validation.AbpValidationException: ModelState is not valid! See ValidationErrors for details.
-   at Volo.Abp.AspNetCore.Mvc.Validation.ModelStateValidator.Validate(ModelStateDictionary modelState)
-   at Volo.Abp.Account.Web.Pages.Account.IdentityServerSupportedLoginModel.OnPostAsync(String action)
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.GenericTaskHandlerMethod.Convert[T](Object taskAsObject)
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.ExecutorFactory.GenericTaskHandlerMethod.Execute(Object receiver, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeHandlerMethodAsync()
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeNextPageFilterAsync()
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Rethrow(PageHandlerExecutedContext context)
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure.PageActionInvoker.InvokeInnerFilterAsync()
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ExceptionContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResourceFilter()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
-   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
-   at Volo.Abp.AspNetCore.Serilog.AbpSerilogMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Volo.Abp.AspNetCore.Auditing.AbpAuditingMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Volo.Abp.AspNetCore.Auditing.AbpAuditingMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
-   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events, IBackChannelLogoutService backChannelLogoutService)
-   at IdentityServer4.Hosting.MutualTlsEndpointMiddleware.Invoke(HttpContext context, IAuthenticationSchemeProvider schemes)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at IdentityServer4.Hosting.BaseUrlMiddleware.Invoke(HttpContext context)
-   at Volo.Abp.AspNetCore.Uow.AbpUnitOfWorkMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Volo.Abp.AspNetCore.MultiTenancy.MultiTenancyMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Builder.ApplicationBuilderAbpJwtTokenMiddlewareExtension.<>c__DisplayClass0_0.<<UseJwtTokenMiddleware>b__0>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Volo.Abp.AspNetCore.Tracing.AbpCorrelationIdMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.RequestLocalization.AbpRequestLocalizationMiddleware.InvokeAsync(HttpContext context, RequestDelegate next)
-   at Microsoft.AspNetCore.Builder.UseMiddlewareExtensions.<>c__DisplayClass6_1.<<UseMiddlewareInterface>b__1>d.MoveNext()
---- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
-
-HEADERS
-=======
-
-Host: localhost:44349
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0
-Cache-Control: no-cache
-Content-Type: application/x-www-form-urlencoded
-Cookie: .AspNetCore.Culture=c%3Des%7Cuic%3Des; XSRF-TOKEN=CfDJ8JCCBt_8KiVKkbkXtzq6V1BEYfhL6Rn88RfFmrkfC8EzpKhj8ZWhGP8HT8Su_7q2wcmhITLg9rrh-Pj-Tu2c88c--wQg5UvXiQBVc_LqlQiqzMUWyxSrrxDIq22_1kmRA62cvIOrUkGLe4ezmZIYCRU; .AspNetCore.Antiforgery.x3gzYhuqPJM=CfDJ8JCCBt_8KiVKkbkXtzq6V1Ar3NwJpY9vG9eyrUYeAySYBUHsTHCmdGylFpjWOKf6CGVEnPNtJP3FDmgWIXe8le2DgOYxcAIkBkM5W1bybUkamp4yVbDYcimwEswXU1tsMSv3el885ZapGup7WneIcZo
-Pragma: no-cache
-Referer: https://localhost:44349/Account/Login
-Content-Length: 639
-X-Correlation-Id: 2c103514abd44a17b1ec792b6a5c1dc3
-```
+> **Note**: However, it might be possible if you had any sensitive localization key-value pair in your localization entries, because this endpoint returns all localization values to be able to be used in the application. Therefore, keep that in mind while defining new localization entries.
 
 ### XSLT Injection [Risk: Medium] - False Positive
 
 - *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=%3Cxsl%3Avalue-of+select%3D%22system-property%28%27xsl%3Avendor%27%29%22%2F%3E&returnUrl=%2F&uiCulture=ar*
-- *[POST] — https://localhost:44349/Account/Manage _(other several account URLS)_*
+- *[POST] — https://localhost:44349/Account/Login _(same URL with different parameters...)_*
+- *[POST] — https://localhost:44349/Account/Register _(same URL with different parameters...)_*
+- *[POST] — https://localhost:44349/Account/Manage _(same URL with different parameters...)_*
+- *[POST] — https://localhost:44349/Account/ForgotPassword _(same URL with different parameters...)_*
+- *[POST] — https://localhost:44349/SaasWidgets/LatestTenants _(same URL with different parameters...)_*
 - *[POST] — https://localhost:44349/AuditLogs*
 
 **Description**: 
@@ -224,7 +148,7 @@ Injection using XSL transformations may be possible and may allow an attacker to
 
 **Explanation**: 
 
-This is a **false-positive** alert. v8.1.0 uses .NET 8 and the XSLT transformation is not possible on .NET5 or higher.
+This is a **false-positive** alert. v8.2.0 uses .NET 8 and the XSLT transformation is not possible on .NET5 or higher.
 
 ### Application Error Disclosure [Risk: Low] — False Positive
 
@@ -236,12 +160,12 @@ The reported page contains an error/warning message that may disclose sensitive 
 
 **Explanation:** 
 
-This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP Framework throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue: [github.com/abpframework/abp/issues/14177](https://github.com/abpframework/abp/issues/14177).
+This vulnerability was reported as a **positive** alert because the application ran in `Development` mode. ABP Framework throws exceptions for developers in the `Development` environment. We set the environment to `Production` and re-run the test, then the server sent a *500-Internal Error* without the error disclosed. Therefore this alert is **false-positive**. Further information can be found in the following issue: [github.com/abpframework/abp/issues/14177](https://github.com/abpframework/abp/issues/14177#issuecomment-1268206947).
 
 ### Cookie No `HttpOnly` Flag [Risk: Low] — Positive (No need for a fix)
 
-* *[GET] — https://localhost:44349 (and there are several URLs)*
-* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2FAccount%2FForgotPassword%3FreturnUrl%3D%2522%252F%253E%253Cxsl%253Avalue-of%2520select%253D%2522system-property(%2527xsl%253Avendor%2527)%2522%252F%253E%253C!--&uiCulture=ar (and there are several URLs)*
+* *[GET] — https://localhost:44349 (and other several URLs...)*
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2FAccount%2FForgotPassword%3FreturnUrl%3D%2522%252F%253E%253Cxsl%253Avalue-of%2520select%253D%2522system-property(%2527xsl%253Avendor%2527)%2522%252F%253E%253C!--&uiCulture=ar (and other several URLs...)*
 * *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript*
 
 **Description:** 
@@ -254,8 +178,8 @@ The following alert is related to the next alert. Therefore, to understand this 
 
 ### Cookie Without Secure Flag [Risk: Low] — Positive (No need for a fix)
 
-* *[GET] — https://localhost:44349 (and there are several URLs)*
-* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%*
+* *[GET] — https://localhost:44349 (and other several URLs...)*
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D% (same url with different query parameters...)*
 
 **Description:** A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections. The following cookies don't have an `httponly` flag.
 
@@ -268,7 +192,7 @@ All the pages that are setting the `XSRF-TOKEN` and `.AspNetCore.Culture` cookie
 
 > **Note for IDS4 users**: The `idsrv.session` cookie is being used in IDS4 and after ABP 6.x, ABP switched to OpenIddict ([github.com/abpframework/abp/issues/7221](https://github.com/abpframework/abp/issues/7221)). Therefore, this cookie is not being used in the current startup templates and you can ignore this note if you have created your application after v6.0+. However, if you are still using Identity Server 4, there is an issue related to the `idsrv.session` cookie, it cannot be set as `HttpOnly`; you can see the related thread at its own repository: [github.com/IdentityServer/IdentityServer4/issues/3873](https://github.com/IdentityServer/IdentityServer4/issues/3873)
 
-The `.AspNetCore.Culture` and `XSRF-TOKEN` cookies are being retrieved via JavaScript in ABP Angular, MVC and Blazor WASM projects. Therefore they cannot be set as `HttpOnly`. You can check out the following modules that retrieve these cookies via JavaScript:
+The `.AspNetCore.Culture` and `XSRF-TOKEN` cookies are being retrieved via JavaScript in ABP Angular, MVC and Blazor WASM UIs. Therefore they cannot be set as `HttpOnly`. You can check out the following modules that retrieve these cookies via JavaScript:
 
 * [github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Swashbuckle/wwwroot/swagger/ui/abp.swagger.js#L28](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.Swashbuckle/wwwroot/swagger/ui/abp.swagger.js#L28)
 * [github.com/abpframework/abp/blob/dev/modules/cms-kit/src/Volo.CmsKit.Admin.Web/Pages/CmsKit/Pages/update.js#L54](https://github.com/abpframework/abp/blob/dev/modules/cms-kit/src/Volo.CmsKit.Admin.Web/Pages/CmsKit/Pages/update.js#L54)
@@ -280,7 +204,7 @@ The `.AspNetCore.Culture` and `XSRF-TOKEN` cookies are being retrieved via JavaS
 
 **Setting `XSRF-TOKEN` cookie as `HttpOnly`:**
 
-If you want to set it, you can do it in the [AbpAntiForgeryOptions](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc/Volo/Abp/AspNetCore/Mvc/AntiForgery/AbpAntiForgeryOptions.cs#L56) class.
+If you want to set it, you can configure the `TokenCookie` property of the [AbpAntiForgeryOptions](https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.AspNetCore.Mvc/Volo/Abp/AspNetCore/Mvc/AntiForgery/AbpAntiForgeryOptions.cs#L56) class.
 
 **Setting `.AspNetCore.Culture` cookie as `HttpOnly`:**
 
@@ -290,10 +214,10 @@ The related issue for this alert can be found at [github.com/abpframework/abp/is
 
 ### Cookie with SameSite Attribute None [Risk: Low] — Positive (No need for a fix)
 
-* *[GET] — https://localhost:44349 (and there are several URLs)*
+* *[GET] — https://localhost:44349 (and other several URLs...)*
 * *[GET] — https://localhost:44349/Abp/ApplicationConfigurationScript*
 * *[GET] — https://localhost:44349/Account/ForgotPassword (and there are several URLs)*
-* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%252FAccount%252F%7E%252FAccount%252FLogin&uiCulture=a (and there are several URLs)*
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F%3Fpage%3D%252FAccount%252F%7E%252FAccount%252FLogin&uiCulture=a (and other several URLs...)*
 
 **Description:** 
 
@@ -307,7 +231,7 @@ Ensure that the `SameSite` attribute is set to either `lax` or ideally `strict` 
 
 ### Cookie without `SameSite` Attribute [Risk: Low] — Positive (No need for a fix)
 
-* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F&uiCulture=ar _(and there are several URLs with different parameters of https://localhost:44349/Abp/Languages/Switch endpoint)_* 
+* *[GET] — https://localhost:44349/Abp/Languages/Switch?culture=ar&returnUrl=%2F&uiCulture=ar _(and other several URLs with different query parameters...)_* 
 
 **Description:** 
 
@@ -339,6 +263,7 @@ The response of the endpoints above return localization texts which are not real
 
 - *[DELETE] — https://localhost:44349/api/feature-management/features?providerName=E&providerKey=49dfb08f-f5ed-0b61-8d37-3a0fc6b61679*
 - *[DELETE] — https://localhost:44349/api/identity/claim-types/4c580525-c08f-9280-f729-3a0fc6b9c3fa*
+- *[DELETE] — https://localhost:44349/api/account/sessions/de2f8683-f8f4-d3bb-6b7e-3a138af89d1f*
 - *[DELETE] — https://localhost:44349/api/language-management/languages/6b311a44-65bd-14ea-1a21-3a0e778b41d5*
 - *[DELETE] — https://localhost:44349/api/saas/tenants/c77b1554-5837-3303-9983-3a0e77824bb3*
 - *[DELETE] — https://localhost:44349/api/openiddict/scopes?id=af5a66e2-7cbb-cf69-7301-3a0fc6bb0ebf*
@@ -375,13 +300,37 @@ Manually confirm that the timestamp data is not sensitive, and that the data can
 
 **Explanation**: 
 
-This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most password strength estimator and it's being used widely and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
+This vulnerability was reported as a positive alert, because ABP uses the [zxcvbn](https://github.com/dropbox/zxcvbn) library for [password complexity indicators](https://docs.abp.io/en/commercial/latest/ui/angular/password-complexity-indicator-component). This library is one of the most used password strength estimator and it does not disclosure any sensitive data related to web server's timestamp and therefore it's a **false-positive** alert.
 
 ---
 
+### X-Content-Type-Options Header Missing [Risk: Low] - Positive (Fixed)
+
+- *[GET] — https://localhost:44349/client-proxies/account-proxy.js?_v=638550091940000000 (and other client-proxies related URLs)*
+- *[GET] — https://localhost:44349/favicon.svg*
+- *[GET] — https://localhost:44349/global-styles.css?_v=638556076064360335*
+- *[GET] — https://localhost:44349/libs/@fortawesome/fontawesome-free/css/all.css?_v=%5CWEB-INF%5Cweb.xml (other several URLs...)*
+- other URLs...
+
+**Description**: 
+
+The Anti-MIME-Sniffing header `X-Content-Type-Options` was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.
+
+**Solution**:
+
+Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.
+
+If possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.
+
+**Explanation**: 
+
+The `X-Content-Type-Options` header allows you to avoid MIME type sniffing by saying that the MIME types are deliberately configured. This headeer is not strictly required, but it is highly recommended for security reasons. While modern browsers have improved security features, you can still set this header for ensuring the security of web applications.
+
+You can add the [ABP's Security Header Middleware](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers#security-headers-middleware) into the request pipeline to set the `X-Content-Type-Options` as *no-sniff*. Also, this middleware adds other pre-defined security headers to your application, including `X-XSS-Protection`, `X-Frame-Options` and `Content-Security-Policy` (if it's enabled). Read the documentation for more info: [https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Security-Headers).
+
 ## Other Alerts
 
-The following alerts are reported by the community or our customers.
+The following alerts are reported by the community or our customers in v8.1+.
 
 ### Disclosed Microsoft Client Secret [Risk: Medium] - Positive (No need for a fix)
 
@@ -393,8 +342,7 @@ Secrets shall never be exposed to unauthorized parties. This exposure can result
 
 **Explanation**: 
 
-The endpoint `/setting-management/` requires permission to be visited and can only be accessed via authorized users. It is the setting page to configure the application settings including 
-
+The endpoint `/setting-management/` requires permission to be visited and can only be accessed via authorized users. It is the setting page to configure the application settings including the *default localization language*, *timezone*, *layout type*, *password settings* and more...
 
 
 ### Incorrect Session Handling – Insufficient Session Termination [Risk: Low]  - Positive 
@@ -423,11 +371,11 @@ attacks. The second, on the other hand, discloses some endpoints that are unavai
 
 **Explanation**: 
 
-* **Application Configuration Script** 
+* **Application Configuration Script**: 
 
   These 2 endpoints are used by ABP application templates. The first one `/Abp/ApplicationConfigurationScript` provides configuration and user based definitions with JSON format. This data is important for SPA based applications to get the current language, localization texts, policies, settings, user info, current tenant or time zone information. This is not a data leak. User specific data can only be accessed after user logon. Other data are application-wide used not dangerous for unauthenticated users. For more information about Application Configuration, check out [docs.abp.io/en/abp/latest/API/Application-Configuration](https://docs.abp.io/en/abp/latest/API/Application-Configuration)
 
-* **Service Proxy Script**
+* **Service Proxy Script**:
 
   This endpoint provides auto-generated JavaScript AJAX call methods for the backend operations. This may disclosure information about the host API methods. On the other hand, it makes easy to consume the HTTP APIs from JavaScript side. ABP Application Services are automatically converted to JavaScript proxies. But it does not mean that these JavaScript methods can be executed anonymously. The attacker still needs to log in to perform operations. For more information about Service Proxy Script, check out [docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies](https://docs.abp.io/en/abp/latest/UI/AspNetCore/Dynamic-JavaScript-Proxies). If you want to disable this functionality, check out [github.com/abpframework/abp/issues/12297](https://github.com/abpframework/abp/issues/12297)
 
@@ -442,7 +390,7 @@ application. This vulnerability is useful to increase the efficiency of brute fo
 
 **Explanation**: 
 
-If the email is known, it is easier to find the corresponding password. With the "Forgot Password" function, the attacker can enumerate valid email addresses as the function returns `Cannot find the given email` error, when there is no user registered with the provided e-mail address.  The following issue has been opened for this vulnerability, you can follow it at [github.com/abpframework/abp/issues/19588](https://github.com/abpframework/abp/issues/19588).
+If the email is known, it is easier to find the corresponding password. With the "Forgot Password" function, the attacker can enumerate valid email addresses as the function returns `Cannot find the given email` error, when there is no user registered with the provided e-mail address. This vulnerability has been fixed with v8.2, see the related issue for more info: [github.com/abpframework/abp/issues/19588](https://github.com/abpframework/abp/issues/19588).
 
 ### Software Version Disclosure [Risk: Low] - Positive (No need for a fix)
 
