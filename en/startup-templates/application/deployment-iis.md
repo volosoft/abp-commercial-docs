@@ -254,6 +254,12 @@ We can visit the websites from a browser.
 
 ![Tiered IIS deployment](../../images/iis-sample-tiered-deployment.gif)
 
+## Web Socket
+
+You have to enable **Web Socket** feature in IIS for using Blazor Server. 
+
+https://learn.microsoft.com/en-us/iis/configuration/system.webserver/websocket
+
 ## What's next?
 
 - [Docker Deployment using Docker Compose](deployment-docker-compose.md)
