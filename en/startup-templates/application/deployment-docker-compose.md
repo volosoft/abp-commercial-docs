@@ -705,7 +705,7 @@ docker build -f Dockerfile.local -t acme/bookstore-blazor:latest . #Builds the i
 
 {{ if Tiered == "No"  }}
 
-​	{{ if UI == "NG" || if UI == "Blazor"  }}
+​	{{ if UI == "NG" || UI == "Blazor"  }}
 
 ### Http.Api.Host
 
