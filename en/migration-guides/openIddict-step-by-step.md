@@ -377,4 +377,4 @@ dotnet ef migrations add AbpOpenIddictMigration
 
 ## See Also
 
-* [ABP Version 6.0 Migration Guide](Abp-6_0.md)
+* [ABP Version 6.0 Migration Guide](https://abp.io/docs/8.0/migration-guides/Abp-6_0)
