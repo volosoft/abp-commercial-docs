@@ -97,6 +97,7 @@ Incase you need to place a custom modal that will be triggered by an entity acti
 
 ### The Quick Solution
 
+{%{
 1. Place your custom modal inside `AppComponent` template.
   ```html
   <abp-modal [(visible)]="isModalOpen">
@@ -117,6 +118,7 @@ Incase you need to place a custom modal that will be triggered by an entity acti
     </ng-template>
   </abp-modal>
   ```
+}%}
 
 2. Add the following inside your `AppComponent` class:
   ```js
