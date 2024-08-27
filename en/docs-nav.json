@@ -275,7 +275,7 @@
                 },
                 {
                   "text": "Multi-tenant Domain Resolving in Microservice Solution",
-                  "path": "guides/ms-multi-tenant-domain-resolver.md"
+                  "path": "guides/ms-multi-tenant-domain-resolving.md"
                 },
                 {
                   "text": "Migrating to OpenIdDict",
