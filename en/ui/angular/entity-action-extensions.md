@@ -97,6 +97,7 @@ Incase you need to place a custom modal that will be triggered by an entity acti
 
 ### The Quick Solution
 
+{%{
 1. Place your custom modal inside `AppComponent` template.
   ```html
   <abp-modal [(visible)]="isModalOpen">
@@ -116,7 +117,8 @@ Incase you need to place a custom modal that will be triggered by an entity acti
       <!-- YOUR CONFIRMATION BUTTON HERE -->
     </ng-template>
   </abp-modal>
-  ```
+  ``` 
+  }%}
 
 2. Add the following inside your `AppComponent` class:
   ```js
@@ -201,6 +203,7 @@ Consider the modal will be displayed in the Identity module. How can we lazy-loa
   })
   export class IdentityOutletComponent {}
 
+{%{
   @Component({
     template: `
       <abp-modal [visible]="isVisible$ | async" (disappear)="onDisappear()">
@@ -222,6 +225,7 @@ Consider the modal will be displayed in the Identity module. How can we lazy-loa
       </abp-modal>
     `,
   })
+}%}
   export class IdentityPopupsComponent {
     @Select(IdentityPopupsState.isVisible)
     isVisible$: Observable<boolean>;
