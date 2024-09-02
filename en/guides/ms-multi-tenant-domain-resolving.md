@@ -269,7 +269,7 @@ After you run the `create-tls-secrets.ps1` script, now it should create kubernet
 Your request from the browser to the subdomain will be accepted by the ingress-controller. The ingress-controller will redirect to the chart ingress based on your request. 
 
 Update your charts ingress.yaml files. Ex for **administration-ingress.yaml**:
-
+{%{
 ```yaml
 spec:
   tls:
@@ -303,6 +303,7 @@ spec:
             port:
               number: 80
 ```
+}%}
 
 **Update all the application, gateway and microservice ingress.yaml files.** Eventually, when deploy the application, you will be seeing:
 ![updated-ingress](D:\Github\abp-commercial-docs\en\images\updated-ingress.png)
@@ -311,6 +312,7 @@ spec:
 
 Navigate to applications, gateways and microservices' **x-deployment.yaml** file and override the newly introduced `TenantDomain` key:
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain" # Add this key
@@ -319,11 +321,12 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.config.authServer.authority }}"
 ...
 ```
-
+}%}
 > **Update all the application, gateway and microservice deployment.yaml files.** 
 
 **For AuthServer, also add the WildCardDomains that is used to handle subdomain *redirect* and *post_logout redirect* URIs to the authserver-deployment.yaml file:**
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain"
@@ -348,6 +351,7 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.wildCardDomains.productService }}"
 ...
 ```
+}%}
 
 Afterwards, update the **values.yaml** file for all the sub-charts (administration, authserver etc):
 
