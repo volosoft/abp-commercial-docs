@@ -117,8 +117,9 @@ Incase you need to place a custom modal that will be triggered by an entity acti
       <!-- YOUR CONFIRMATION BUTTON HERE -->
     </ng-template>
   </abp-modal>
-  ``` 
-  }%}
+
+  ```
+}%}
 
 2. Add the following inside your `AppComponent` class:
   ```js
