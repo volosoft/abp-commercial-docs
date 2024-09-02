@@ -8,6 +8,15 @@
     "Tiered": ["Yes", "No"]
 }
 ````
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Creating a new solution",
+    "Path": "getting-started-create-solution"
+  }
+}
+````
 
 > This tutorial assumes that you've already purchased an [ABP Commercial license](https://commercial.abp.io/pricing) and have an active ABP Commercial account.
 
@@ -22,15 +31,15 @@ First things first! Let's setup your development environment before creating the
 The following tools should be installed on your development machine:
 
 * [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (v17.3+) for Windows / [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/). <sup id="a-editor">[1](#f-editor)</sup>
-* [.NET 7.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
+* [.NET 8.0+](https://dotnet.microsoft.com/en-us/download/dotnet)
 {{ if UI != "Blazor" }}
 * [Node v16 or v18](https://nodejs.org/)
 * [Yarn v1.20+ (not v2)](https://classic.yarnpkg.com/en/docs/install) <sup id="a-yarn">[2](#f-yarn)</sup> or npm v6+ (already installed with Node)
 {{ end }}
 {{ if Tiered == "Yes" }}
-* [Redis](https://redis.io/) (as the [distributed cache](Caching.md)).
+* [Redis](https://redis.io/) (as the [distributed cache](https://abp.io/docs/8.0/Caching)).
 {{ else }}
-* [Redis](https://redis.io/) (as the [distributed cache](Caching.md)) is required if you select the Public website option.
+* [Redis](https://redis.io/) (as the [distributed cache](https://abp.io/docs/8.0/Caching)) is required if you select the Public website option.
 {{ end }}
 
 <sup id="f-editor"><b>1</b></sup> _You can use another editor instead of Visual Studio as long as it supports .NET Core and ASP.NET Core._ <sup>[↩](#a-editor)</sup>
@@ -83,7 +92,3 @@ If you've already installed, you can update it:
 ````shell
 abp suite update
 ````
-
-## Next Step
-
-* [Creating a new solution](getting-started-create-solution.md)

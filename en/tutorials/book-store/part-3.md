@@ -8,6 +8,20 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Integration Tests",
+    "Path": "tutorials/book-store/part-4"
+  },
+  "Previous": {
+    "Name": "The Book List Page",
+    "Path": "tutorials/book-store/part-2"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -61,7 +75,7 @@ using System.Threading.Tasks;
 using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Web.Pages.Books;
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class CreateModalModel : BookStorePageModel
     {
@@ -151,8 +165,7 @@ The final content of the `Index.cshtml` is shown below:
     PageLayout.Content.MenuItemName = "BooksStore";
     PageLayout.Content.Title = L["Books"].Value;
 }
-@section scripts
-    {
+@section scripts {
     <abp-script src="/Pages/Books/Index.js" />
 }
 @section content_toolbar {
@@ -275,7 +288,7 @@ using System.Threading.Tasks;
 using Acme.BookStore.Books;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Web.Pages.Books;
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class EditModalModel : BookStorePageModel
     {
@@ -1185,7 +1198,6 @@ Open the `Books.razor` and add the following code to the end of the page:
 
 ````xml
 <Modal @ref="@CreateModal">
-    <ModalBackdrop />
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
@@ -1286,7 +1298,6 @@ We can now define a modal to edit the book. Add the following code to the end of
 
 ````xml
 <Modal @ref="@EditModal">
-    <ModalBackdrop />
     <ModalContent IsCentered="true">
         <Form>
             <ModalHeader>
@@ -1486,7 +1497,6 @@ Here the complete code to create the book management CRUD page, that has been de
     </Card>
 
     <Modal @ref="@CreateModal">
-        <ModalBackdrop />
         <ModalContent IsCentered="true">
             <Form>
                 <ModalHeader>
@@ -1543,7 +1553,6 @@ Here the complete code to create the book management CRUD page, that has been de
     </Modal>
 
     <Modal @ref="@EditModal">
-        <ModalBackdrop />
         <ModalContent IsCentered="true">
             <Form>
                 <ModalHeader>
@@ -1602,7 +1611,3 @@ Here the complete code to create the book management CRUD page, that has been de
 ````
 
 {{end}}
-
-## The Next Part
-
-See the [next part](part-4.md) of this tutorial.

@@ -6,6 +6,17 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "The Book List Page",
+    "Path": "tutorials/book-store/part-2"
+  }
+}
+````
+
 ## About this tutorial
 
 In this tutorial series, you will build an ABP Commercial application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -98,7 +109,7 @@ namespace Acme.BookStore.Books;
 
 public class Book : AuditedAggregateRoot<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public BookType Type { get; set; }
 
@@ -146,6 +157,7 @@ The final folder/file structure should be as shown below:
 EF Core requires to relate entities with your `DbContext`. The easiest way to do this is to add a `DbSet` property to the `BookStoreDbContext` class in the `Acme.BookStore.EntityFrameworkCore` project, as shown below:
 
 ````csharp
+using Acme.BookStore.Books;
 //....
 public class BookStoreDbContext : AbpDbContext<BookStoreDbContext> //....
 {
@@ -350,7 +362,7 @@ namespace Acme.BookStore.Books;
 
 public class BookDto : AuditedEntityDto<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public BookType Type { get; set; }
 
@@ -397,7 +409,7 @@ public class CreateUpdateBookDto
 {
     [Required]
     [StringLength(128)]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     public BookType Type { get; set; } = BookType.Undefined;
@@ -434,7 +446,7 @@ public class BookStoreApplicationAutoMapperProfile : Profile
 
 ### IBookAppService
 
-Next step is to define an interface for the application service. Create an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
+Next step is to define an interface for the application service. Create an interface named `IBookAppService` in the Books folder (namespace) of the `Acme.BookStore.Application.Contracts` project:
 
 ````csharp
 using System;
@@ -541,7 +553,3 @@ If you try to execute the `[GET] /api/app/book` API to get a list of books, the 
 ````
 
 That's pretty cool since we haven't written a single line of code to create the API controller, but now we have a fully working REST API!
-
-## The Next Part
-
-See the [next part](part-2.md) of this tutorial.

@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Book to Author Relation",
+    "Path": "tutorials/book-store/part-10"
+  },
+  "Previous": {
+    "Name": "Authors: Application Layer",
+    "Path": "tutorials/book-store/part-8"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -64,8 +79,7 @@ Create a new razor page, `Index.cshtml` under the `Pages/Authors` folder of the 
     PageLayout.Content.MenuItemName = "BooksStore";
     PageLayout.Content.Title = L["Books"].Value;
 }
-@section scripts
-    {
+@section scripts {
     <abp-script src="/Pages/Authors/Index.js" />
 }
 @section content_toolbar {
@@ -325,14 +339,14 @@ namespace Acme.BookStore.Web.Pages.Authors
         {
             [Required]
             [StringLength(AuthorConsts.MaxNameLength)]
-            public string Name { get; set; }
+            public string Name { get; set; } = string.Empty;
 
             [Required]
             [DataType(DataType.Date)]
             public DateTime BirthDate { get; set; }
 
             [TextArea]
-            public string ShortBio { get; set; }
+            public string? ShortBio { get; set; }
         }
     }
 }
@@ -449,14 +463,14 @@ public class EditModalModel : BookStorePageModel
 
         [Required]
         [StringLength(AuthorConsts.MaxNameLength)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         [TextArea]
-        public string ShortBio { get; set; }
+        public string? ShortBio { get; set; }
     }
 }
 ```
@@ -585,6 +599,7 @@ function configureRoutes(routes: RoutesService) {
         iconClass: 'fas fa-book',
         order: 101,
         layout: eLayoutType.application,
+        requiredPolicy: 'BookStore.Books  ||  BookStore.Authors',
       },
       {
         path: '/books',
@@ -1131,14 +1146,12 @@ You will need to declare a `using Acme.BookStore.Authors;` statement to the begi
 Open the `BookStoreMenuContributor.cs` in the {{if UI == "MAUIBlazor"}}`Acme.BookStore.MauiBlazor`{{else}}`Acme.BookStore.Blazor`{{end}} project and add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
-if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
-{
-    bookStoreMenu.AddItem(new ApplicationMenuItem(
+bookStoreMenu.AddItem(new ApplicationMenuItem(
         "BooksStore.Authors",
         l["Menu:Authors"],
         url: "/authors"
-    ));
-}
+    ).RequirePermissions(BookStorePermissions.Authors.Default)
+);
 ````
 
 ### Localizations
@@ -1168,7 +1181,3 @@ That's all! This is a fully working CRUD page, you can create, edit and delete t
 > **Tip**: If you run the `.DbMigrator` console application after defining a new permission, it automatically grants these new permissions to the admin role and you don't need to manually grant the permissions yourself.
 
 {{end}}
-
-## The Next Part
-
-See the [next part](part-10.md) of this tutorial.

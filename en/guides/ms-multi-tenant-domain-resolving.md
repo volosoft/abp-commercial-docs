@@ -269,6 +269,7 @@ After you run the `create-tls-secrets.ps1` script, now it should create kubernet
 Your request from the browser to the subdomain will be accepted by the ingress-controller. The ingress-controller will redirect to the chart ingress based on your request. 
 
 Update your charts ingress.yaml files. Ex for **administration-ingress.yaml**:
+
 {%{
 ```yaml
 spec:
@@ -322,6 +323,7 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
 ...
 ```
 }%}
+
 > **Update all the application, gateway and microservice deployment.yaml files.** 
 
 **For AuthServer, also add the WildCardDomains that is used to handle subdomain *redirect* and *post_logout redirect* URIs to the authserver-deployment.yaml file:**

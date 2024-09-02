@@ -8,6 +8,20 @@
 }
 ````
 
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Creating, Updating and Deleting Books",
+    "Path": "tutorials/book-store/part-3"
+  },
+  "Previous": {
+    "Name": "Creating the Server Side",
+    "Path": "tutorials/book-store/part-1"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -112,7 +126,7 @@ Open the `en.json` (*the English translations*) file and change the content as b
     "Menu:ArticleSample": "Article Sample",
     "Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit abp.io.",
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information visit",
     "Date": "Date",
     "Permission:Dashboard": "Dashboard",
     "Menu:Dashboard": "Dashboard",
@@ -131,7 +145,18 @@ Open the `en.json` (*the English translations*) file and change the content as b
     "NewsletterInfo": "Get information about the latest happenings.",
     "NewsletterPreference_Default": "Default Newsletter",
     "NewsletterPrivacyAcceptMessage": "I accept the <a href='/privacy-policy'>Privacy Policy</a>.",
-    "ChangeLanguage": "Change language",
+    "Language": "Language",
+    "Search": "Search",
+    "LoadMore": "Load More",
+    "Settings": "Settings",
+    "Theme": "Theme",
+    "DeviceTheme": "Device theme",
+    "Dark": "Dark",
+    "Light": "Light",
+    "Unspecified": "System",
+    "SeeAllUsers": "See All Users",
+    "TakePhoto": "Take Photo",
+    "ChoosePhoto": "Choose Photo",
     "Menu:BookStore": "Book Store",
     "Menu:Books": "Books",
     "PublishDate": "Publish date",
@@ -259,8 +284,8 @@ Change the `Pages/Books/Index.cshtml` as following:
     PageLayout.Content.MenuItemName = "BooksStore";
     PageLayout.Content.Title = L["Books"].Value;
 }
-@section scripts
-    {
+
+@section scripts {
     <abp-script src="/Pages/Books/Index.js" />
 }
 
@@ -305,7 +330,7 @@ $(function () {
                     title: l('Type'),
                     data: "type",
                     render: function (data) {
-                        return l('Enum:BookType:' + data);
+                        return l('Enum:BookType.' + data);
                     }
                 },
                 {
@@ -606,19 +631,21 @@ Replace the contents of this component as shown below:
 Open the `BookStoreMenuContributor` class in the {{if UI == "MAUIBlazor"}}`MauiBlazor`{{else}}`Blazor`{{end}} project add the following code to the end of the `ConfigureMainMenuAsync` method:
 
 ````csharp
-context.Menu.AddItem(
-    new ApplicationMenuItem(
+var bookStoreMenu =  new ApplicationMenuItem(
         "BooksStore",
         l["Menu:BookStore"],
         icon: "fa fa-book"
-    ).AddItem(
-        new ApplicationMenuItem(
-            "BooksStore.Books",
-            l["Menu:Books"],
-            url: "/books"
-        )
+    );
+
+bookStoreMenu.AddItem(
+    new ApplicationMenuItem(
+        "BooksStore.Books",
+        l["Menu:Books"],
+        url: "/books"
     )
-);
+)
+
+context.Menu.AddItem(bookStoreMenu);
 ````
 
 Run the project, login to the application with the username `admin` and the password `1q2w3E*` and see the new menu item has been added to the main menu:
@@ -643,20 +670,24 @@ namespace Acme.BookStore.Blazor.Pages; {{end}}
 
 public partial class Books
 {
+    public Books()
+    {
+        LocalizationResource = typeof(BookStoreResource);
+    }
+
     protected PageToolbar Toolbar { get; } = new();
 }
 ````
 
 Then open the `Books.razor` and replace the content as the following:
 
-````xml
+```xml
 @page "/books"
 @using Volo.Abp.Application.Dtos
 @using Acme.BookStore.Books
 @using Acme.BookStore.Localization
 @using Volo.Abp.AspNetCore.Components.Web.Theming.Layout
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<BookStoreResource> L
 @inherits AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>
 
 <CascadingValue Value="this">
@@ -707,7 +738,7 @@ Then open the `Books.razor` and replace the content as the following:
         </CardBody>
     </Card>
 </CascadingValue>
-````
+```
 
 > If you see some syntax errors, you can ignore them if your application property built and run. Visual Studio still has some bugs with Blazor.
 * Inherited from the `AbpCrudPageBase<IBookAppService, BookDto, Guid, PagedAndSortedResultRequestDto, CreateUpdateBookDto>` which implements all the CRUD details for us.
@@ -729,7 +760,3 @@ You can run the application! The final UI of this part is shown below:
 This is a fully working, server side paged, sorted and localized table of books.
 
 {{end # UI }}
-
-## The Next Part
-
-See the [next part](part-3.md) of this tutorial.

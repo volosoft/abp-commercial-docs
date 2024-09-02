@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authors: Application Layer",
+    "Path": "tutorials/book-store/part-8"
+  },
+  "Previous": {
+    "Name": "Authors: Domain Layer",
+    "Path": "tutorials/book-store/part-6"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -133,7 +148,7 @@ public class EfCoreAuthorRepository
     {
     }
 
-    public async Task<Author> FindByNameAsync(string name)
+    public async Task<Author?> FindByNameAsync(string name)
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet.FirstOrDefaultAsync(author => author.Name == name);
@@ -143,13 +158,13 @@ public class EfCoreAuthorRepository
         int skipCount,
         int maxResultCount,
         string sorting,
-        string filter = null)
+        string? filter = null)
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
-                author => author.Name.Contains(filter)
+                author => author.Name.Contains(filter!)
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -193,7 +208,7 @@ public class MongoDbAuthorRepository
     {
     }
 
-    public async Task<Author> FindByNameAsync(string name)
+    public async Task<Author?> FindByNameAsync(string name)
     {
         var queryable = await GetMongoQueryableAsync();
         return await queryable
@@ -204,13 +219,13 @@ public class MongoDbAuthorRepository
         int skipCount,
         int maxResultCount,
         string sorting,
-        string filter = null)
+        string? filter = null)
     {
         var queryable = await GetMongoQueryableAsync();
         return await queryable
             .WhereIf<Author, IMongoQueryable<Author>>(
                 !filter.IsNullOrWhiteSpace(),
-                author => author.Name.Contains(filter)
+                author => author.Name.Contains(filter!)
             )
             .OrderBy(sorting)
             .As<IMongoQueryable<Author>>()
@@ -228,7 +243,3 @@ public class MongoDbAuthorRepository
 > See the [MongoDB Integration document](https://docs.abp.io/en/abp/latest/MongoDB) for more information on the MongoDB based repositories.
 
 {{end}}
-
-## The Next Part
-
-See the [next part](part-8.md) of this tutorial.

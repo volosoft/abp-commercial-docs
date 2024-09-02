@@ -6,6 +6,17 @@
     "DB": ["EF", "Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Previous": {
+    "Name": "Authors: User Interface",
+    "Path": "tutorials/book-store/part-9"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -253,9 +264,9 @@ public class BookDto : AuditedEntityDto<Guid>
 {
     public Guid AuthorId { get; set; }
 
-    public string AuthorName { get; set; }
+    public string AuthorName { get; set; } = string.Empty;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     public BookType Type { get; set; }
 
@@ -285,7 +296,7 @@ namespace Acme.BookStore.Books;
 
 public class AuthorLookupDto : EntityDto<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
 ````
 
@@ -615,19 +626,19 @@ using System.Threading.Tasks;
 using Acme.BookStore.Authors;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Modularity;
 using Volo.Abp.Validation;
 using Xunit;
 
 namespace Acme.BookStore.Books;
 
-{{if DB=="Mongo"}}
-[Collection(BookStoreTestConsts.CollectionDefinitionName)] {{end}}
-public class BookAppService_Tests : BookStoreApplicationTestBase
+public abstract class BookAppService_Tests<TStartupModule> : BookStoreApplicationTestBase<TStartupModule>
+    where TStartupModule : IAbpModule
 {
     private readonly IBookAppService _bookAppService;
     private readonly IAuthorAppService _authorAppService;
 
-    public BookAppService_Tests()
+    protected BookAppService_Tests()
     {
         _bookAppService = GetRequiredService<IBookAppService>();
         _authorAppService = GetRequiredService<IAuthorAppService>();
@@ -789,7 +800,7 @@ public class CreateModalModel : BookStorePageModel
 
         [Required]
         [StringLength(128)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         public BookType Type { get; set; } = BookType.Undefined;
@@ -872,7 +883,7 @@ public class EditModalModel : BookStorePageModel
 
         [Required]
         [StringLength(128)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         public BookType Type { get; set; } = BookType.Undefined;

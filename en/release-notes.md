@@ -1,12 +1,22 @@
-# Release Notes
+# Version History
 
 This document contains **brief release notes** for each release. Release notes only include **major features** and **visible enhancements**. They don't include all the development done in the related version. **To see raw and detailed change logs for every release, please check [the full change logs document](https://commercial.abp.io/releases).**
 
 > Release notes in this document don't cover the features made in the open-source ABP Framework. For the ABP Framework features, check the blog post for the related version.
 
-## 7.4 (2023-08-16)
+## 8.0 (2023-11-23)
 
-> This version is currently in preview. The final release date is planned for September, 2023.
+> This version is currently in preview. The final release date is planned for February, 2024.
+
+See the detailed **[blog post / announcement](https://blog.abp.io/abp/announcing-abp-8-0-release-candidate)** for the v8.0 release.
+
+* Suite: Generating Master/Detail Relationship
+* Getting profile picture from social/external logins.
+* Switch Ocelot to YARP for the API Gateway for Microservice Solution Template.
+* Password complexity indicators for MVC & Blazor UIs.
+* Readonly view & export/import support for Identity/Users page.
+
+## 7.4 (2023-08-16)
 
 See the detailed **[blog post / announcement](https://blog.abp.io/abp/ABP.IO-Platform-7-4-RC-Has-Been-Published)** for the v7.4 release.
 

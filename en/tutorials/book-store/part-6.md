@@ -6,6 +6,21 @@
     "DB": ["EF","Mongo"]
 }
 ````
+
+````json
+//[doc-nav]
+{
+  "Next": {
+    "Name": "Authors: Database Integration",
+    "Path": "tutorials/book-store/part-7"
+  },
+  "Previous": {
+    "Name": "Authorization",
+    "Path": "tutorials/book-store/part-5"
+  }
+}
+````
+
 ## About This Tutorial
 
 In this tutorial series, you will build an ABP based web application named `Acme.BookStore`. This application is used to manage a list of books and their authors. It is developed using the following technologies:
@@ -64,9 +79,9 @@ namespace Acme.BookStore.Authors;
 
 public class Author : FullAuditedAggregateRoot<Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = string.Empty;
     public DateTime BirthDate { get; set; }
-    public string ShortBio { get; set; }
+    public string? ShortBio { get; set; }
 
     private Author()
     {
@@ -75,9 +90,9 @@ public class Author : FullAuditedAggregateRoot<Guid>
 
     internal Author(
         Guid id,
-        [NotNull] string name,
+        string name,
         DateTime birthDate,
-        [CanBeNull] string shortBio = null)
+        string? shortBio = null)
         : base(id)
     {
         SetName(name);
@@ -85,13 +100,13 @@ public class Author : FullAuditedAggregateRoot<Guid>
         ShortBio = shortBio;
     }
 
-    internal Author ChangeName([NotNull] string name)
+    internal Author ChangeName(string name)
     {
         SetName(name);
         return this;
     }
 
-    private void SetName([NotNull] string name)
+    private void SetName(string name)
     {
         Name = Check.NotNullOrWhiteSpace(
             name,
@@ -147,9 +162,9 @@ public class AuthorManager : DomainService
     }
 
     public async Task<Author> CreateAsync(
-        [NotNull] string name,
+        string name,
         DateTime birthDate,
-        [CanBeNull] string shortBio = null)
+        string? shortBio = null)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
 
@@ -168,8 +183,8 @@ public class AuthorManager : DomainService
     }
 
     public async Task ChangeNameAsync(
-        [NotNull] Author author,
-        [NotNull] string newName)
+        Author author,
+        string newName)
     {
         Check.NotNull(author, nameof(author));
         Check.NotNullOrWhiteSpace(newName, nameof(newName));
@@ -241,13 +256,13 @@ namespace Acme.BookStore.Authors;
 
 public interface IAuthorRepository : IRepository<Author, Guid>
 {
-    Task<Author> FindByNameAsync(string name);
+    Task<Author?> FindByNameAsync(string name);
 
     Task<List<Author>> GetListAsync(
         int skipCount,
         int maxResultCount,
         string sorting,
-        string filter = null
+        string? filter = null
     );
 }
 ````
@@ -265,7 +280,3 @@ We will implement this repository in the next part.
 This part covered the domain layer of the authors functionality of the book store application. The main files created/updated in this part was highlighted in the picture below:
 
 ![bookstore-author-domain-layer](images/bookstore-author-domain-layer.png)
-
-## The Next Part
-
-See the [next part](part-7.md) of this tutorial.
