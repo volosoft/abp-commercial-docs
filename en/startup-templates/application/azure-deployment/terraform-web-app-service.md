@@ -111,7 +111,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 
@@ -165,7 +165,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 # Create the web app, pass in the App Service Plan ID
@@ -221,7 +221,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 # Create the web app, pass in the App Service Plan ID
@@ -295,7 +295,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 # Create the web app, pass in the App Service Plan ID
@@ -399,7 +399,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 # Create the web app, pass in the App Service Plan ID
@@ -452,7 +452,7 @@ resource "azurerm_service_plan" "appserviceplan" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "B1"
+  sku_name            = "B3"
 }
 
 # Create the web app, pass in the App Service Plan ID
