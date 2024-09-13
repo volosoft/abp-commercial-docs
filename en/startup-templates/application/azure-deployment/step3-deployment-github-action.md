@@ -44,14 +44,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
         working-directory: ./aspnet-core
@@ -68,7 +74,7 @@ jobs:
         run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
       - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-apihost
           path: ${{env.DOTNET_ROOT}}/apihost
@@ -89,7 +95,7 @@ jobs:
 
       - name: Deploy apihost
         id: deploy-to-webapp-1
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'apihost-angular' # Replace with your app name
           slot-name: 'Production'
@@ -139,14 +145,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
           include-prerelease: true
       
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -162,7 +174,7 @@ jobs:
         run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/apihost/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
       
       - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-apihost
           path: ${{env.DOTNET_ROOT}}/apihost
@@ -175,14 +187,14 @@ jobs:
 
     steps:
       - name: Download artifact from apihost
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-apihost
           path: ./apihost
 
       - name: Deploy apihost
         id: deploy-to-webapp-2
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'apihost-blazor' # Replace with your app name
           slot-name: 'Production'
@@ -233,14 +245,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -260,13 +278,13 @@ jobs:
         working-directory: ./src/blazorservertierdemo.Blazor # Replace with your project name
 
       - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-apihost
           path: ${{env.DOTNET_ROOT}}/apihost
 
       - name: Upload artifact for webapp
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-webapp
           path: ${{env.DOTNET_ROOT}}/webapp
@@ -279,14 +297,14 @@ jobs:
       url: ${{ steps.deploy-to-webapp-3.outputs.webapp-url }}
 
       - name: Download artifact from apihost
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-apihost
           path: ./apihost
 
       - name: Deploy apihost
         id: deploy-to-webapp-2
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'apihost-blazorserver' # Replace with your app name
           slot-name: 'Production'
@@ -294,14 +312,14 @@ jobs:
           package: ./apihost
 
       - name: Download artifact from webapp
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-webapp
           path: ./webapp
 
       - name: Deploy webapp
         id: deploy-to-webapp-3
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'webapp-blazorserver' # Replace with your app name
           slot-name: 'Production'
@@ -332,14 +350,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -363,19 +387,19 @@ jobs:
         working-directory: ./src/blazorservertierdemo.Blazor # Replace with your project name
 
       - name: Upload artifact for authserver
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-authserver
           path: ${{env.DOTNET_ROOT}}/authserver
       
       - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-apihost
           path: ${{env.DOTNET_ROOT}}/apihost
 
       - name: Upload artifact for webapp
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-webapp
           path: ${{env.DOTNET_ROOT}}/webapp
@@ -389,14 +413,14 @@ jobs:
 
     steps:
       - name: Download artifact from authserver
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-authserver
           path: ./authserver
 
       - name: Deploy authserver
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'authserver-blazorserver' # Replace with your app name
           slot-name: 'Production'
@@ -404,14 +428,14 @@ jobs:
           package: ./authserver
 
       - name: Download artifact from apihost
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-apihost
           path: ./apihost
 
       - name: Deploy apihost
         id: deploy-to-webapp-2
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'apihost-blazorserver' # Replace with your app name
           slot-name: 'Production'
@@ -419,14 +443,14 @@ jobs:
           package: ./apihost
 
       - name: Download artifact from webapp
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-webapp
           path: ./webapp
 
       - name: Deploy webapp
         id: deploy-to-webapp-3
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'webapp-blazorserver' # Replace with your app name
           slot-name: 'Production'
@@ -460,15 +484,21 @@ build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-        dotnet-version: '7.x'
+        dotnet-version: '8.x'
         include-prerelease: true
 
-    - name: Build with dotnet
+    - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
+      - name: Build with dotnet
         run: dotnet build --configuration Release
 
     - name: Run migrations
@@ -483,7 +513,7 @@ build:
         run: dotnet dev-certs https -v -ep ${{env.DOTNET_ROOT}}/myapp/authserver.pfx -p 2D7AA457-5D33-48D6-936F-C48E5EF468ED # Replace with your password
 
     - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
         name: .net-app
         path: ${{env.DOTNET_ROOT}}/myapp
@@ -497,13 +527,13 @@ deploy:
 
     steps:
     - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
         name: .net-app
 
     - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
         app-name: 'yourapp' # Replace with your azure web app name
         slot-name: 'Production'
@@ -534,14 +564,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
+      - name: Install ABP CLI
+        run: |
+          dotnet tool install -g Volo.Abp.Cli
+          abp install-libs
+        shell: bash
+    
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -565,19 +601,19 @@ jobs:
         working-directory: ./src/mvctierdemo.Web # Replace with your project name
 
       - name: Upload artifact for authserver
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-authserver
           path: ${{env.DOTNET_ROOT}}/authserver
       
       - name: Upload artifact for apihost
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-apihost
           path: ${{env.DOTNET_ROOT}}/apihost
 
       - name: Upload artifact for webapp
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: .net-webapp
           path: ${{env.DOTNET_ROOT}}/webapp
@@ -590,45 +626,45 @@ jobs:
       url: ${{ steps.deploy-to-webapp-3.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from authserver
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-authserver
-          path: ./authserver
-
-      - name: Deploy authserver
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'authserver-prodemo'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.authserverprodemoPublishSettings }} # Set your Azure Web App publish your profile as a secret in your repository settings
-          package: ./authserver
-
       - name: Download artifact from apihost
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-apihost
           path: ./apihost
 
       - name: Deploy apihost
         id: deploy-to-webapp-2
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'apihost-prodemo'
           slot-name: 'Production'
           publish-profile: ${{ secrets.apihostprodemoPublishSettings }} # Set your Azure Web App publish your profile as a secret in your repository settings
           package: ./apihost
 
+      - name: Download artifact from authserver
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-authserver
+          path: ./authserver
+
+      - name: Deploy authserver
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'authserver-prodemo'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.authserverprodemoPublishSettings }} # Set your Azure Web App publish your profile as a secret in your repository settings
+          package: ./authserver
+
       - name: Download artifact from webapp
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: .net-webapp
           path: ./webapp
 
       - name: Deploy webapp
         id: deploy-to-webapp-3
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'webapp-prodemo'
           slot-name: 'Production'
