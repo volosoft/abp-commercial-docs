@@ -39,6 +39,12 @@
     }
 ```
 
+```json
+    "Web": {
+        "rootUrl": "https://yourapp.azurewebsites.net/"
+    }
+```
+
 {{else}}
 
 - Modify the **yourapp.Web** URL in every location throughout your project.
@@ -50,6 +56,12 @@
 ```json
 "App": {
     "SelfUrl": "https://yourapp.azurewebsites.net"
+}
+```
+
+```json
+"Web": {
+    "rootUrl": "https://yourapp.azurewebsites.net/"
 }
 ```
 
@@ -105,6 +117,12 @@
     }
 ```
 
+```json
+    "Angular": {
+        "rootUrl": "https://yourapp.azurewebsites.net/"
+    }
+```
+
 - Modify the **yourapp.HttpApi.Host** URL in every location throughout your project.
 
     This includes the following files:
@@ -128,6 +146,12 @@
 ```json
     "App": {
         "SelfUrl": "https://yourapp.azurewebsites.net"
+    }
+```
+
+```json
+    "Blazor": {
+        "rootUrl": "https://yourapp.azurewebsites.net/"
     }
 ```
 
@@ -182,6 +206,12 @@
 ```json
 "App": {
     "SelfUrl": "https://yourapp.azurewebsites.net"
+}
+```
+
+```json
+"Blazor": {
+    "rootUrl": "https://yourapp.azurewebsites.net/"
 }
 ```
 
