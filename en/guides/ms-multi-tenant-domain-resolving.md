@@ -304,7 +304,7 @@ spec:
             port:
               number: 80
 ```
-}½}
+}%}
 
 **Update all the application, gateway and microservice ingress.yaml files.** Eventually, when deploy the application, you will be seeing:
 ![updated-ingress](D:\Github\abp-commercial-docs\en\images\updated-ingress.png)
@@ -313,6 +313,7 @@ spec:
 
 Navigate to applications, gateways and microservices' **x-deployment.yaml** file and override the newly introduced `TenantDomain` key:
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain" # Add this key
@@ -321,11 +322,13 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.config.authServer.authority }}"
 ...
 ```
+}%}
 
 > **Update all the application, gateway and microservice deployment.yaml files.** 
 
 **For AuthServer, also add the WildCardDomains that is used to handle subdomain *redirect* and *post_logout redirect* URIs to the authserver-deployment.yaml file:**
 
+{%{
 ```yaml
 ... Removed for brevity
 - name: "TenantDomain"
@@ -350,6 +353,7 @@ Navigate to applications, gateways and microservices' **x-deployment.yaml** file
   value: "{{ .Values.wildCardDomains.productService }}"
 ...
 ```
+}%}
 
 Afterwards, update the **values.yaml** file for all the sub-charts (administration, authserver etc):
 
